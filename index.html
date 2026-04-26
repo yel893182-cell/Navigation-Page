@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SBTI 人格测试</title>
+  <!-- ==================== 官方规范：第一步引入Turnstile脚本 ==================== -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <!-- ==================== 以上为新增内容，原有CSS完全不动 ==================== -->
   <style>
     :root {
       --bg: #f6faf6;
@@ -17,7 +20,6 @@
       --shadow: 0 16px 40px rgba(47, 73, 55, 0.08);
       --radius: 22px;
     }
-
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     body {
@@ -27,27 +29,23 @@
       color: var(--text);
       min-height: 100vh;
     }
-
     .shell {
       max-width: 980px;
       margin: 0 auto;
       padding: 24px 16px 56px;
     }
-
     .card {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
-
     .hero {
       padding: 28px;
       margin-top: 20px;
       overflow: hidden;
       position: relative;
     }
-
     .hero::after {
       content: "";
       position: absolute;
@@ -59,7 +57,6 @@
       background: linear-gradient(180deg, rgba(127, 165, 134, 0.18), rgba(127, 165, 134, 0.02));
       pointer-events: none;
     }
-
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -72,7 +69,6 @@
       padding: 8px 12px;
       margin-bottom: 16px;
     }
-
     h1, h2, h3, p { margin: 0; }
     .hero h1 {
       font-size: clamp(28px, 5vw, 52px);
@@ -87,7 +83,6 @@
       line-height: 1.75;
       max-width: 720px;
     }
-
     .hero-grid {
       display: grid;
       grid-template-columns: 1.3fr 0.9fr;
@@ -95,19 +90,16 @@
       align-items: stretch;
       margin-top: 24px;
     }
-
     .mini-panel {
       padding: 18px;
       border-radius: 18px;
       border: 1px solid var(--line);
       background: linear-gradient(180deg, #fbfefb, #f3f8f4);
     }
-
     .mini-panel h3 {
       font-size: 15px;
       margin-bottom: 10px;
     }
-
     .mini-panel ul {
       margin: 0;
       padding-left: 18px;
@@ -115,7 +107,6 @@
       line-height: 1.8;
       font-size: 14px;
     }
-
         .hero-actions {
       display: flex;
       flex-wrap: wrap;
@@ -140,17 +131,14 @@
       justify-content: center;
       margin-top: 28px;
     }
-
     button {
       border: 0;
       cursor: pointer;
       transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
       font: inherit;
     }
-
     button:hover { transform: translateY(-1px); }
     button:disabled { cursor: not-allowed; opacity: 0.55; transform: none; }
-
     .btn-primary {
       background: var(--accent-strong);
       color: #fff;
@@ -159,7 +147,6 @@
       box-shadow: 0 12px 30px rgba(77, 106, 83, 0.18);
       font-weight: 700;
     }
-
     .btn-secondary {
       background: #fff;
       color: var(--accent-strong);
@@ -168,16 +155,13 @@
       border: 1px solid var(--line);
       font-weight: 700;
     }
-
     .screen { display: none; }
     .screen.active { display: block; }
-
     .test-wrap,
     .result-wrap {
       margin-top: 22px;
       padding: 22px;
     }
-
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -186,7 +170,6 @@
       margin-bottom: 18px;
       flex-wrap: wrap;
     }
-
     .progress {
       flex: 1;
       min-width: 240px;
@@ -196,7 +179,6 @@
       overflow: hidden;
       position: relative;
     }
-
     .progress > span {
       display: block;
       width: 0;
@@ -205,25 +187,21 @@
       border-radius: inherit;
       transition: width .22s ease;
     }
-
     .progress-text {
       color: var(--muted);
       font-size: 13px;
       white-space: nowrap;
     }
-
     .question-list {
       display: grid;
       gap: 16px;
     }
-
     .question {
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 18px;
       background: linear-gradient(180deg, #ffffff, #fbfdfb);
     }
-
     .question-meta {
       display: flex;
       justify-content: space-between;
@@ -233,7 +211,6 @@
       color: var(--muted);
       font-size: 12px;
     }
-
     .badge {
       display: inline-flex;
       align-items: center;
@@ -243,19 +220,16 @@
       background: var(--soft);
       border: 1px solid var(--line);
     }
-
     .question-title {
       font-size: 16px;
       line-height: 1.7;
       white-space: pre-wrap;
     }
-
     .options {
       display: grid;
       gap: 10px;
       margin-top: 14px;
     }
-
     .option {
       display: flex;
       align-items: flex-start;
@@ -266,25 +240,21 @@
       background: #fff;
       transition: border-color .16s ease, background .16s ease, transform .16s ease;
     }
-
     .option:hover {
       border-color: #bcd0c1;
       background: #f8fcf9;
     }
-
     .option input {
       margin-top: 3px;
       accent-color: var(--accent-strong);
       transform: scale(1.1);
       flex-shrink: 0;
     }
-
     .option-code {
       font-weight: 800;
       color: var(--accent-strong);
       min-width: 22px;
     }
-
     .actions-bottom {
       display: flex;
       justify-content: space-between;
@@ -294,20 +264,17 @@
       margin-top: 18px;
       padding-top: 6px;
     }
-
     .hint {
       color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
     }
-
     .result-hero {
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
       gap: 18px;
       align-items: stretch;
     }
-
     .type-box,
     .score-box,
     .dim-box,
@@ -318,26 +285,22 @@
       padding: 18px;
       background: linear-gradient(180deg, #ffffff, #fbfdfb);
     }
-
     .type-kicker {
       font-size: 12px;
       color: var(--accent-strong);
       margin-bottom: 8px;
       letter-spacing: .05em;
     }
-
     .type-name {
       font-size: clamp(30px, 5vw, 48px);
       line-height: 1.08;
       letter-spacing: -0.03em;
     }
-
     .type-subname {
       margin-top: 8px;
       color: var(--muted);
       font-size: 15px;
     }
-
     .match {
       margin-top: 18px;
       display: inline-flex;
@@ -350,14 +313,12 @@
       color: var(--accent-strong);
       font-weight: 700;
     }
-
     .type-desc {
       margin-top: 18px;
       line-height: 1.85;
       font-size: 15px;
       color: #304034;
     }
-
     .score-box h3,
     .dim-box h3,
     .top3-box h3,
@@ -365,62 +326,52 @@
       font-size: 16px;
       margin-bottom: 12px;
     }
-
     .score-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
-
     .score-item {
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 12px;
       background: #fff;
     }
-
     .score-item .k {
       font-size: 12px;
       color: var(--muted);
       margin-bottom: 6px;
     }
-
     .score-item .v {
       font-size: 20px;
       font-weight: 800;
       color: var(--accent-strong);
     }
-
     .dim-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
     }
-
     .dim-pill {
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 12px;
       background: #fff;
     }
-
     .dim-pill .label {
       color: var(--muted);
       font-size: 12px;
       margin-bottom: 6px;
     }
-
     .dim-pill .value {
       font-size: 20px;
       font-weight: 800;
       color: var(--accent-strong);
     }
-
     .top3-list {
       display: grid;
       gap: 10px;
     }
-
     .top3-item {
       border: 1px solid var(--line);
       border-radius: 14px;
@@ -431,36 +382,30 @@
       gap: 12px;
       align-items: center;
     }
-
     .top3-item strong {
       display: block;
       margin-bottom: 4px;
     }
-
     .top3-item span {
       color: var(--muted);
       font-size: 13px;
     }
-
     .top3-score {
       color: var(--accent-strong);
       font-weight: 800;
       white-space: nowrap;
     }
-
     .about-box p {
       color: var(--muted);
       font-size: 14px;
       line-height: 1.8;
     }
-
     .footer-note {
       margin-top: 16px;
       color: var(--muted);
       font-size: 12px;
       line-height: 1.7;
     }
-
     
     .result-layout {
       display: grid;
@@ -608,7 +553,6 @@
       font-size: 13px;
       line-height: 1.8;
     }
-
     .author-box {
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -652,7 +596,6 @@
       font-size: 14px;
       line-height: 1.9;
     }
-
     .result-actions {
       display: flex;
       justify-content: space-between;
@@ -664,7 +607,6 @@
     @media (max-width: 860px) {
       .result-top { grid-template-columns: 1fr; }
     }
-
 @media (max-width: 860px) {
       .hero-grid,
       .result-hero {
@@ -672,7 +614,6 @@
       }
       .dim-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
     @media (max-width: 600px) {
       .shell { padding: 14px 12px 42px; }
       .hero, .test-wrap, .result-wrap { padding: 16px; }
@@ -684,6 +625,44 @@
   </style>
 </head>
 <body>
+  <!-- ==================== 官方规范：Turnstile全屏验证遮罩 ==================== -->
+  <div id="turnstile-mask" style="position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:99999;flex-direction:column;gap:16px;">
+    <h2 style="color:#1e2a22;margin:0;">请先完成人机验证</h2>
+    <!-- 官方标准隐式渲染容器，严格遵循文档规范 -->
+    <div
+      class="cf-turnstile"
+      data-sitekey="0x4AAAAAADDX-cz64N1Q663vp6y4syOlxR80"
+      data-callback="onTurnstileSuccess"
+      data-error-callback="onTurnstileError"
+      data-expired-callback="onTurnstileExpired"
+      data-theme="light"
+      data-size="normal"
+    ></div>
+    <p id="turnstile-hint" style="color:#6a786f;margin:0;font-size:14px;">验证通过后即可进入测试</p>
+  </div>
+
+  <!-- ==================== 官方规范：Turnstile回调函数 ==================== -->
+  <script>
+    // 验证成功回调：关闭遮罩，显示页面
+    function onTurnstileSuccess(token) {
+      console.log("Turnstile验证成功，token：", token);
+      document.getElementById('turnstile-mask').remove();
+    }
+
+    // 验证失败回调：提示用户
+    function onTurnstileError(errorCode) {
+      console.error("Turnstile验证失败：", errorCode);
+      document.getElementById('turnstile-hint').textContent = "验证失败，请刷新页面重试";
+    }
+
+    // 验证过期回调：提示用户重新验证
+    function onTurnstileExpired() {
+      console.warn("Turnstile令牌已过期");
+      document.getElementById('turnstile-hint').textContent = "验证已过期，请重新完成验证";
+    }
+  </script>
+  <!-- ==================== 以上为新增认证内容，原有HTML业务代码完全不动 ==================== -->
+
   <div class="shell">
     <section id="intro" class="screen active">
       <div class="hero card hero-minimal">
@@ -700,21 +679,18 @@
             托管：Cloudflare (免费)
           </span>
           <span>
-            域名：Aliyun (自费)
+            域名：Spaceship (自费)
           </span>
         </div>
       </div>
     </section>
-
     <section id="test" class="screen">
       <div class="test-wrap card">
         <div class="topbar">
           <div class="progress"><span id="progressBar"></span></div>
           <div class="progress-text" id="progressText">0 / 31</div>
         </div>
-
         <div id="questionList" class="question-list"></div>
-
         <div class="actions-bottom">
           <div class="hint" id="testHint">全选完才会放行。世界已经够乱了，起码把题做完整。</div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -724,7 +700,6 @@
         </div>
       </div>
     </section>
-
     
     <section id="result" class="screen">
       <div class="result-wrap card">
@@ -734,7 +709,6 @@
               <img id="posterImage" class="poster-image" alt="人格结果图" />
               <div id="posterCaption" class="poster-caption">怎么样，被我拿捏了吧？</div>
             </div>
-
             <div class="type-box">
               <div class="type-kicker" id="resultModeKicker">你的主类型</div>
               <div class="type-name" id="resultTypeName">CTRL（拿捏者）</div>
@@ -742,33 +716,28 @@
               <div class="type-subname" id="resultTypeSub">系统备注会显示在这里。</div>
             </div>
           </div>
-
           <div class="analysis-box">
             <h3>该人格的简单解读</h3>
             <p id="resultDesc"></p>
           </div>
-
           <div class="dim-box">
             <h3>十五维度评分</h3>
             <div id="dimList" class="dim-list"></div>
           </div>
-
           <div class="note-box">
             <h3>友情提示</h3>
             <p id="funNote">本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。</p>
           </div>
-
                     <details class="author-box">
             <summary>作者的话</summary>
             <div class="author-content">
-              <p>本测试首发于b站up主蛆肉儿串儿 本网站测试只供娱乐 切勿当真</p>              
+              <p>本测试首发于b站up主蛆肉儿串儿，初衷是劝诫一位爱喝酒的朋友戒酒。</p>
+              <p>由于作者的人格是SHIT愤世者，所以平等的攻击了各位，在此抱歉！！不过我是一个绝世大美女，你们一定会原谅我，有B站的朋友们也可以关注我。</p>
               <p>关于这个测试，我没法很好的平衡娱乐和专业性，因此对于一些人格的阐释较为模糊或完全不准（如屌丝可能并非真的屌丝），如有冒犯非常抱歉！！</p>
               <p>再鉴于时间精力有限，就随便搞了一个先这样玩玩，后续会慢慢完善修改的，总之好玩为主，还请不要用于盈利呀。</p>
-             <p>૮ ・ﻌ・ა</p>
             </div>
           </details>
         </div>
-
         <div class="result-actions">
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <button id="restartBtn" class="btn-secondary">重新测试</button>
@@ -777,9 +746,7 @@
         </div>
       </div>
     </section>
-
   </div>
-
   
   <script>
     const dimensionMeta = {
@@ -1095,7 +1062,6 @@
         ]
       }
     ];
-
     const TYPE_LIBRARY = {
   "CTRL": {
     "code": "CTRL",
@@ -1289,7 +1255,6 @@
   "DRUNK": "./image/DRUNK.png",
   "IMFW": "./image/IMFW.png"
 };
-
     const NORMAL_TYPES = [
   {
     "code": "CTRL",
@@ -1470,34 +1435,28 @@
   }
 };
     const dimensionOrder = ['S1','S2','S3','E1','E2','E3','A1','A2','A3','Ac1','Ac2','Ac3','So1','So2','So3'];
-
     const DRUNK_TRIGGER_QUESTION_ID = 'drink_gate_q2';
-
     const app = {
       shuffledQuestions: [],
       answers: {},
       previewMode: false
     };
-
     const screens = {
       intro: document.getElementById('intro'),
       test: document.getElementById('test'),
       result: document.getElementById('result')
     };
-
     const questionList = document.getElementById('questionList');
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
     const submitBtn = document.getElementById('submitBtn');
     const testHint = document.getElementById('testHint');
-
     function showScreen(name) {
       Object.entries(screens).forEach(([key, el]) => {
         el.classList.toggle('active', key === name);
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
     function shuffle(array) {
       const arr = [...array];
       for (let i = arr.length - 1; i > 0; i--) {
@@ -1506,7 +1465,6 @@
       }
       return arr;
     }
-
     function getVisibleQuestions() {
       const visible = [...app.shuffledQuestions];
       const gateIndex = visible.findIndex(q => q.id === 'drink_gate_q1');
@@ -1515,12 +1473,10 @@
       }
       return visible;
     }
-
     function getQuestionMetaLabel(q) {
       if (q.special) return '补充题';
       return app.previewMode ? dimensionMeta[q.dim].name : '维度已隐藏';
     }
-
     function renderQuestions() {
       const visibleQuestions = getVisibleQuestions();
       questionList.innerHTML = '';
@@ -1549,12 +1505,10 @@
         `;
         questionList.appendChild(card);
       });
-
       questionList.querySelectorAll('input[type="radio"]').forEach(input => {
         input.addEventListener('change', (e) => {
           const { name, value } = e.target;
           app.answers[name] = Number(value);
-
           if (name === 'drink_gate_q1') {
             if (Number(value) !== 3) {
               delete app.answers['drink_gate_q2'];
@@ -1562,14 +1516,11 @@
             renderQuestions();
             return;
           }
-
           updateProgress();
         });
       });
-
       updateProgress();
     }
-
     function updateProgress() {
       const visibleQuestions = getVisibleQuestions();
       const total = visibleQuestions.length;
@@ -1583,38 +1534,30 @@
         ? '都做完了。现在可以把你的电子魂魄交给结果页审判。'
         : '全选完才会放行。世界已经够乱了，起码把题做完整。';
     }
-
     function sumToLevel(score) {
       if (score <= 3) return 'L';
       if (score === 4) return 'M';
       return 'H';
     }
-
     function levelNum(level) {
       return { L: 1, M: 2, H: 3 }[level];
     }
-
     function parsePattern(pattern) {
       return pattern.replace(/-/g, '').split('');
     }
-
     function getDrunkTriggered() {
       return app.answers[DRUNK_TRIGGER_QUESTION_ID] === 2;
     }
-
     function computeResult() {
       const rawScores = {};
       const levels = {};
       Object.keys(dimensionMeta).forEach(dim => { rawScores[dim] = 0; });
-
       questions.forEach(q => {
         rawScores[q.dim] += Number(app.answers[q.id] || 0);
       });
-
       Object.entries(rawScores).forEach(([dim, score]) => {
         levels[dim] = sumToLevel(score);
       });
-
       const userVector = dimensionOrder.map(dim => levelNum(levels[dim]));
       const ranked = NORMAL_TYPES.map(type => {
         const vector = parsePattern(type.pattern).map(levelNum);
@@ -1632,17 +1575,14 @@
         if (b.exact !== a.exact) return b.exact - a.exact;
         return b.similarity - a.similarity;
       });
-
       const bestNormal = ranked[0];
       const drunkTriggered = getDrunkTriggered();
-
       let finalType;
       let modeKicker = '你的主类型';
       let badge = `匹配度 ${bestNormal.similarity}% · 精准命中 ${bestNormal.exact}/15 维`;
       let sub = '维度命中度较高，当前结果可视为你的第一人格画像。';
       let special = false;
       let secondaryType = null;
-
       if (drunkTriggered) {
         finalType = TYPE_LIBRARY.DRUNK;
         secondaryType = bestNormal;
@@ -1659,7 +1599,6 @@
       } else {
         finalType = bestNormal;
       }
-
       return {
         rawScores,
         levels,
@@ -1673,7 +1612,6 @@
         secondaryType
       };
     }
-
     function renderDimList(result) {
       const dimList = document.getElementById('dimList');
       dimList.innerHTML = dimensionOrder.map(dim => {
@@ -1690,11 +1628,9 @@
         `;
       }).join('');
     }
-
     function renderResult() {
       const result = computeResult();
       const type = result.finalType;
-
       document.getElementById('resultModeKicker').textContent = result.modeKicker;
       document.getElementById('resultTypeName').textContent = `${type.code}（${type.cn}）`;
       document.getElementById('matchBadge').textContent = result.badge;
@@ -1704,7 +1640,6 @@
       document.getElementById('funNote').textContent = result.special
         ? '本测试仅供娱乐。隐藏人格和傻乐兜底都属于作者故意埋的损招，请勿把它当成医学、心理学、相学、命理学或灵异学依据。'
         : '本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。你可以笑，但别太当真。';
-
       const posterBox = document.getElementById('posterBox');
       const posterImage = document.getElementById('posterImage');
       const imageSrc = TYPE_IMAGES[type.code];
@@ -1717,11 +1652,9 @@
         posterImage.alt = '';
         posterBox.classList.add('no-image');
       }
-
       renderDimList(result);
       showScreen('result');
     }
-
     function startTest(preview = false) {
       app.previewMode = preview;
       app.answers = {};
@@ -1735,13 +1668,11 @@
       renderQuestions();
       showScreen('test');
     }
-
     document.getElementById('startBtn').addEventListener('click', () => startTest(false));
     document.getElementById('backIntroBtn').addEventListener('click', () => showScreen('intro'));
     document.getElementById('submitBtn').addEventListener('click', renderResult);
     document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
     document.getElementById('toTopBtn').addEventListener('click', () => showScreen('intro'));
   </script>
-
 </body>
 </html>
